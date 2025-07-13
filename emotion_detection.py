@@ -1,4 +1,19 @@
 import requests
+import json
+
+def add_dominant_emotion(emotionScores):
+    '''Examines a dictionary of emotion scores and adds the dominant_emotion of the item
+    with the highest score'''
+
+    highScore = 0
+    dominantEmotion = None
+    for (emotion, score) in emotionScores.items():
+        if score > highScore:
+            highScore = score
+            dominantEmotion = emotion
+    
+    emotionScores.update({"dominant_emotion": dominantEmotion})
+    return emotionScores
 
 def emotion_detector(text_to_analyze):
     ''' Function to call the Watson emotion detection service and return the response'''
@@ -6,4 +21,20 @@ def emotion_detector(text_to_analyze):
     inputDoc = { "raw_document": { "text": text_to_analyze } }  # dictionary with text to be analyzed
     header = {"grpc-metadata-mm-model-id": "emotion_aggregated-workflow_lang_en_stock"}  # Request headers
     response = requests.post(url=emotionServiceUrl, json=inputDoc, headers=header)  # Send POST request emotion service
-    return response.text  # Return the response
+
+    responseDoc = json.loads(response.text)
+
+    # Build the base scores dictionary from the response
+    scores = {
+        "anger_score": responseDoc["emotionPredictions"][0]["emotion"]["anger"],
+        "disgust_score": responseDoc["emotionPredictions"][0]["emotion"]["disgust"],
+        "fear_score": responseDoc["emotionPredictions"][0]["emotion"]["fear"],
+        "joy_score": responseDoc["emotionPredictions"][0]["emotion"]["joy"],
+        "sadness_score": responseDoc["emotionPredictions"][0]["emotion"]["sadness"]
+    }
+
+    # Find and add the dominant emotion
+    add_dominant_emotion(scores)
+
+    return scores  # return the scores
+    
