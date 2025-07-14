@@ -1,3 +1,5 @@
+'''Emotion Detector Flask Server Application'''
+
 from flask import Flask, render_template, request
 from EmotionDetection.emotion_detection import emotion_detector
 
@@ -6,8 +8,8 @@ app = Flask("Emotion Detector")
 
 @app.route("/emotionDetector")
 def detect_emotion():
-    '''Provided the textToAnalyze parameter, call the emotion_detector to analyze a statment and return
-    a formatted analysis'''
+    '''Provided the textToAnalyze parameter, call the emotion_detector to analyze a 
+    statement and return a formatted analysis'''
 
     # Retrieve the text to analyze from the request arguments
     text_to_analyze = request.args.get("textToAnalyze")
@@ -23,11 +25,14 @@ def detect_emotion():
     sadness = emotion["sadness"]
     dominant = emotion["dominant_emotion"]
 
-    response = (
-        f"For the given statement, the system response is 'anger': {anger}, "
-        f"'disgust': {disgust}, 'fear': {fear}, 'joy': {joy} and 'sadness': {sadness}. "
-        f"The dominant emotion is {dominant}."
-    )
+    response = "Invalid text! Please try again!"
+
+    if dominant is not None:
+        response = (
+            f"For the given statement, the system response is 'anger': {anger}, "
+            f"'disgust': {disgust}, 'fear': {fear}, 'joy': {joy} and 'sadness': {sadness}. "
+            f"The dominant emotion is {dominant}."
+        )
 
     return response
 
