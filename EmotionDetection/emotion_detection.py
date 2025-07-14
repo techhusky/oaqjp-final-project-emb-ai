@@ -26,11 +26,11 @@ def emotion_detector(text_to_analyze):
 
     # Build the base scores dictionary from the response
     scores = {
-        "anger_score": responseDoc["emotionPredictions"][0]["emotion"]["anger"],
-        "disgust_score": responseDoc["emotionPredictions"][0]["emotion"]["disgust"],
-        "fear_score": responseDoc["emotionPredictions"][0]["emotion"]["fear"],
-        "joy_score": responseDoc["emotionPredictions"][0]["emotion"]["joy"],
-        "sadness_score": responseDoc["emotionPredictions"][0]["emotion"]["sadness"]
+        "anger": responseDoc["emotionPredictions"][0]["emotion"]["anger"],
+        "disgust": responseDoc["emotionPredictions"][0]["emotion"]["disgust"],
+        "fear": responseDoc["emotionPredictions"][0]["emotion"]["fear"],
+        "joy": responseDoc["emotionPredictions"][0]["emotion"]["joy"],
+        "sadness": responseDoc["emotionPredictions"][0]["emotion"]["sadness"]
     }
 
     # Find and add the dominant emotion
